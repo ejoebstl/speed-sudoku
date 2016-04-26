@@ -51,6 +51,7 @@ bool check(const field &in) {
             } else {
                 a[in[i][j]] = true;
                 b[in[j][i]] = true;
+                c[in[x][y]] = true;
             }
         
         }
