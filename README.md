@@ -1,3 +1,3 @@
 # speed-sudoku
 
-More infos TBD. 
+Who can code the fastest Sudoku solver (in c++ 14)?
