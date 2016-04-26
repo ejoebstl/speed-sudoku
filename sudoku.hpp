@@ -2,10 +2,10 @@
 
 const int FIELD_SIZE = 9;
 
-typedef array<array<char, FIELD_SIZE>, FIELD_SIZE> field;
+typedef array<array<char, FIELD_SIZE>, FIELD_SIZE> Field;
 
-field inputToField(const string input) {
-    field out;
+Field inputToField(const string input) {
+    Field out;
 
     assert(input.size() == FIELD_SIZE * FIELD_SIZE);
 
@@ -22,11 +22,15 @@ field inputToField(const string input) {
     return out;
 }
 
-void print(const field &in) {
+void print(const Field &in, int hx = -1, int hy = -1) {
     for(size_t i = 0; i < FIELD_SIZE; i++) {
         for(size_t j = 0; j < FIELD_SIZE; j++) {
             cout << (int)in[i][j];
-            cout << " ";
+            if(i == hx && j == hy) {
+                cout << "*";
+            } else {
+                cout << " ";
+            }
             if(j % 3 == 2) {
                 cout << "   ";
             }
@@ -44,32 +48,52 @@ void print(const field &in) {
  * If we have duplicates in row/col/box or a field is 
  * not set, we return false, otherwise true. 
  */
-bool check(const field &in) {
+bool check(const Field &in) {
     array<bool, FIELD_SIZE> a; 
-    array<bool, FIELD_SIZE> b; 
-    array<bool, FIELD_SIZE> c; 
 
+    // Check all rows
     for(size_t i = 0; i < FIELD_SIZE; i++) {
-        fill(a.begin(), b.end(), false);
-
-        size_t bx = (i % 3) * 3;
-        size_t by = (i / 3) * 3;
+        fill(a.begin(), a.end(), false);
         for(size_t j = 0; j < FIELD_SIZE; j++) {
-            
-            // Box coords.
-            size_t x = (j % 3) + bx;
-            size_t y = (j / 3) + by;
-
-            if(in[i][j] < 1 || in[i][j] > FIELD_SIZE || a[in[i][j]] || 
-               in[x][y] < 1 || in[x][y] > FIELD_SIZE || c[in[x][y]] ||
-               in[j][i] < 1 || in[j][i] > FIELD_SIZE || b[in[j][i]]) { 
-                return false;
-            } else {
-                a[in[i][j]] = true;
-                b[in[j][i]] = true;
-                c[in[x][y]] = true;
+            if(in[i][j] < 1 || in[i][j] > FIELD_SIZE) {
+                return false; // Invalid value. 
             }
-        
+            if(a[in[i][j] - 1]) {
+                return false; // Duplicate
+            }
+            a[in[i][j] - 1] = true;
+        }
+    }
+    
+    // Check all cols
+    for(size_t i = 0; i < FIELD_SIZE; i++) {
+        fill(a.begin(), a.end(), false);
+        for(size_t j = 0; j < FIELD_SIZE; j++) {
+            if(in[j][i] < 1 || in[j][i] > FIELD_SIZE) {
+                return false; // Invalid value. 
+            }
+            if(a[in[j][i] - 1]) {
+                return false; // Duplicate
+            }
+            a[in[j][i] - 1] = true;
+        }
+    }
+
+    // Check all boxes 
+    for(size_t x = 0; x < FIELD_SIZE; x += 3) {
+        for(size_t y = 0; y < FIELD_SIZE; y += 3) {
+            fill(a.begin(), a.end(), false);
+            for(size_t i = 0; i < 3; i++) {
+                for(size_t j = 0; j < 3; j++) {
+                    if(in[x + i][y + j] < 1 || in[x + i][y + j] > FIELD_SIZE) {
+                        return false; // Invalid value. 
+                    }
+                    if(a[in[x + i][y + j] - 1]) {
+                        return false; // Duplicate
+                    }
+                    a[in[x + i][y + j] - 1] = true;
+                }
+            }
         }
     }
 

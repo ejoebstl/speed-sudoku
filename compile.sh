@@ -1,2 +1,2 @@
 #!/bin/bash
-g++ --std=c++1y main.cpp -o main.o
+g++ --std=c++1y -O0 -g main.cpp -o main.o
