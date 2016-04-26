@@ -31,7 +31,7 @@ int main() {
 
             solve(f);
 
-            if(check(f)) {
+            if(!check(f)) {
                 cout << "## Solution was incorrect!" << endl;
                 abort();
             }

@@ -22,6 +22,22 @@ field inputToField(const string input) {
     return out;
 }
 
+void print(const field &in) {
+    for(size_t i = 0; i < FIELD_SIZE; i++) {
+        for(size_t j = 0; j < FIELD_SIZE; j++) {
+            cout << (int)in[i][j];
+            cout << " ";
+            if(j % 3 == 2) {
+                cout << "   ";
+            }
+        }
+        cout << endl;
+        if(i % 3 == 2) {
+            cout << endl;
+        }
+    }
+}
+
 /*
  * Check sudoku result. 
  *
