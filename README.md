@@ -1,4 +1,4 @@
-# speed-sudoku
+# speed-sudoku 🏆
 
 Who can code the fastest Sudoku solver (in c++ 14)?
 
@@ -7,6 +7,8 @@ Who can code the fastest Sudoku solver (in c++ 14)?
 Branch the repository, build your own solver (```solver\_USERNAME.hpp```), and then create a pull request. 
 
 You can use the solver template (```solver.hpp```). Input/output format is also explained there.  
+
+Use ```./compile.sh``` to compile and ```./main.o``` to test with a few pre-defined sudokus. 
 
 ## Benchmarking
 

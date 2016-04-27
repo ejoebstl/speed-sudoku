@@ -7,7 +7,7 @@
 using namespace std;
 
 #include "sudoku.hpp"
-#include "solver.hpp"
+#include "solver_ejoebstl.hpp"
 
 const size_t RUNS = 1;
 
@@ -27,10 +27,23 @@ int main() {
     for(size_t i = 0; i < inputs.size(); i++) {
         for(size_t j = 0; j < RUNS; j++) {
             Field f = inputToField(inputs[i]);
+            Field orig = inputToField(inputs[i]);
 
             auto start = chrono::steady_clock::now();
 
             solve(f);
+            
+            auto end= chrono::steady_clock::now();
+
+            for(size_t i = 0; i < FIELD_SIZE; i++) {
+                for(size_t j = 0; j < FIELD_SIZE; j++) {
+                    if(orig[i][j] != 0 && orig[i][j] != f[i][j]) {
+                        cout << "## Fixed input fields were modified!" << endl;
+                        print(f);
+                        abort();
+                    }
+                }
+            }
 
             if(!check(f)) {
                 cout << "## Solution was incorrect!" << endl;
@@ -38,7 +51,6 @@ int main() {
                 abort();
             }
 
-            auto end= chrono::steady_clock::now();
             double duration = chrono::duration_cast<chrono::microseconds>(end - start).count();
 
             sum += duration;
