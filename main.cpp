@@ -7,7 +7,7 @@
 using namespace std;
 
 #include "sudoku.hpp"
-#include "solver_ejoebstl.hpp"
+#include "solver.hpp"
 
 const size_t RUNS = 10;
 
