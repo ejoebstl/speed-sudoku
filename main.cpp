@@ -9,7 +9,7 @@ using namespace std;
 #include "sudoku.hpp"
 #include "solver_ejoebstl.hpp"
 
-const size_t RUNS = 1;
+const size_t RUNS = 10;
 
 array<string, 6> inputs = {
     "7..8...4....92......3.4..78..6...1..3...8...5..5...6..13..7.2......38....9...5..3",
@@ -55,9 +55,9 @@ int main() {
 
             sum += duration;
         
-            cout << "Input " << i << " run " << j << ": " << duration << "ms" << endl;
+            cout << "Input " << i << " run " << j << ": " << duration << "us" << endl;
         }
     }
 
-    cout << "Average over all runs and inputs: " << (sum / (inputs.size() + RUNS)) << "ms " << endl;
+    cout << "Average over all runs and inputs: " << (sum / (inputs.size() + RUNS)) << "us " << endl;
 }

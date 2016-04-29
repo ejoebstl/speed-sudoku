@@ -9,6 +9,7 @@ typedef array<bool, FIELD_SIZE> Constraint;
 array<Constraint, FIELD_SIZE> rows{};
 array<Constraint, FIELD_SIZE> cols{};
 array<Constraint, FIELD_SIZE> boxes{};
+Field cost;
 
 struct Coord {
     int x; 
@@ -21,24 +22,18 @@ inline int boxIdx(int i, int j) {
 
 Coord findNextField(const Field& in) {
 
-    int min = FIELD_SIZE;
+    int min = FIELD_SIZE * 3;
     int rj = -1, ri = -1;
 
     F_LOOP {
         if(in[i][j] == 0) {
             // Todo: We can make that better. 
-            int cost = 0;
-            int box = boxIdx(i, j);
-            for(int k = 0; k < FIELD_SIZE; k++) {
-                if(rows[i][k] && cols[j][k] && boxes[box][k]) {
-                    cost++;
-                }
-            }
+            int c = cost[i][j];
             
-            if(cost <= min) {
+            if(c <= min) {
                 rj = j;
                 ri = i;    
-                min = cost;
+                min = c;
             }
         }
     }
@@ -59,6 +54,16 @@ void unset(Field& in, int x, int y) {
         rows[x][val] = false;
         cols[y][val] = false;
         boxes[box][val] = false;
+
+        int boxY = (y / 3) * 3;
+        int boxX = (x / 3) * 3;
+
+        for(int i = 0; i < FIELD_SIZE; i++) {
+            cost[x][i]++;
+            cost[i][y]++;
+
+            cost[boxX + i % 3][boxY + i / 3]++;
+        }
     }
 }
 
@@ -74,6 +79,16 @@ void set(Field& in, int x, int y, char val) {
     rows[x][val] = true;
     cols[y][val] = true;
     boxes[box][val] = true;
+
+    int boxY = (y / 3) * 3;
+    int boxX = (x / 3) * 3;
+
+    for(int i = 0; i < FIELD_SIZE; i++) {
+        cost[x][i]--;
+        cost[i][y]--;
+
+        cost[boxX + i % 3][boxY + i / 3]--;
+    }
 }
 
 
@@ -87,6 +102,11 @@ void solve(Field &in) {
         fill(cols[i].begin(), cols[i].end(), false);
         fill(boxes[i].begin(), boxes[i].end(), false);
     }
+    
+    F_LOOP {
+        cost[i][j] = FIELD_SIZE * 3;
+    }
+
 
     F_LOOP {
         auto val = in[i][j];
